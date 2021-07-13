@@ -78,13 +78,18 @@ def runFrameRealignment(DATA_DIR):
         #duplicate or filter interpolation frames to the desired number for the lyric line duration 
         lyric_duration = keyframe_files[frame_num]["timestamp"] - keyframe_files[frame_num-1]["timestamp"]
         output_number = lyric_duration * FRAMERATE - HOVER_TIME
-        interpolation_frames = [fn for fn in jpg_files if f"keyframe_{frame_num}" in fn and "fin" not in fn]
+
+        #frame_str = str(frame_num).zfill(3) - zfilling to 3 digits
+        interpolation_frames = [fn for fn in jpg_files if f"keyframe_{frame_num:03}" in fn and "fin" not in fn]
+        
+        interpolation_frames = sorted(interpolation_frames)
+
         resampled_frames = resampleImages(interpolation_frames, output_number)
         new_frames += resampled_frames
             
         # duplicate key frame
         for i in range(HOVER_TIME):
-            new_frames.append(f'keyframe_{frame_num}_fin.jpg')
+            new_frames.append(f'keyframe_{frame_num:03}_fin.jpg')
 
 
     if TEST:
