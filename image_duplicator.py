@@ -9,7 +9,7 @@ HOVER_TIME = math.floor(FRAMERATE * 0.5) #number of frames to hover on a key fra
 
 TEST = False
 
-DATA_DIR = "test_data/"
+DATA_DIR = "../REM/out/"
 
 
 def testGetFiles():
@@ -23,10 +23,30 @@ def getFiles():
     else:
         return os.listdir(DATA_DIR)
 
-keyframe_json = json.load(open(DATA_DIR + "test_image_timestamps.json"))
+def make_ts_json(lyrics_json, out_dir):
+    jpg_files = [fn for fn in getFiles() if fn.endswith("fin.jpg")]
+    with open(lyrics_json, 'r') as ly_j:
+        lyrics = json.load(ly_j)
+    lyrics.insert(0, {"seconds": 0, "lyrics": "START"})
+    kf_dict_all = {}
+    kf_dict_all['keyframes'] = []
+    for lyric, jpg in zip(lyrics, jpg_files):
+        #if lyric == 0:
+        #    kf_dict = {'filename': jpg, 'timestamp': 0}
+        #    kf_dict_all.append(kf_dict)
+        #    continue
+        kf_dict ={'filename': jpg, 'timestamp': lyric['seconds']}
+        kf_dict_all['keyframes'].append(kf_dict)
+    with open(os.path.join(DATA_DIR, 'test_image_timestamps.json'), 'w') as ts_json:
+        json.dump(kf_dict_all, ts_json)
+
+
+make_ts_json('../REM/bin/stairway/lyrics.json', DATA_DIR)
+
+keyframe_json = json.load(open(os.path.join(DATA_DIR, "test_image_timestamps.json")))
 jpg_files = [fn for fn in getFiles() if fn.endswith(".jpg")]
 
-num_iterations = keyframe_json['number_of_iterations']
+#num_iterations = keyframe_json['number_of_iterations']
 
 keyframe_files = keyframe_json["keyframes"]
 
