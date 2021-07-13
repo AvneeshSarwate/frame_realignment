@@ -1,0 +1,8 @@
+{
+    "number_of_iterations": 200,
+    "keyframes": [
+        {"filename": "keyframe_0_fin.jpeg", "timestamp": 0},
+        {"filename": "keyframe_1_fin.jpeg", "timestamp": 10},
+        {"filename": "keyframe_2_fin.jpeg", "timestamp": 20}
+    ]
+}
